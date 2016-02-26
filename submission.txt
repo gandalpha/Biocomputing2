@@ -1,0 +1,113 @@
+Project work submission
+Requirements
+
+Requirements for project submission are as follows:
+
+Submission must be made by email to andrew.martin@ucl.ac.uk
+A link to the working web page
+If you have used a web-based version control system such as GitHub, a link to your code repository.
+A single gzipped tar file or a zip file for the complete project (i.e. all members of the team) containing all code and all associated documents as follows:
+It must be made completely clear who wrote which section of the code. i.e. the code for the front end, middle layer and database must be in three separate directories each containing a 'readme' file stating who was responsible for the code in that directory (see examples below).
+Documentation for the code must be supplied in the form of comments within the code and a separate document or documents. Either separate documentation could be supplied for the three parts, or a single document can be supplied. Again, the authors of the document(s) must be identified.
+Commentary/reflection. As stated in the introductory lectures, you must each submit a short explanatory essay/commentary on the work you have done. This should have a self-reflective element: How well did the development cycle within the group work? What were the challenges? What might they have done differently? What have you gained from this experience in terms of becoming a better programmer? You might include material (as separate files) not submitted as part of the main assignment. (For example, while not expected, we talked about the possibility of developing a parallel body of code in another language, other than Perl).
+NOTE: If you use a word processor for the documentation and/or commentary, you MUST also supply your documents as a PDF file.
+
+Suggested submission
+
+Here are some suggested directory structures for the files in the submission. Note that these are only suggestions!
+
+topdir/                         (Top directory)
+|-- readme.txt                  (URL for server, names and emails of team)
+|-- database/                   (Database code)
+|   |-- readme.txt              (Name and email of author)
+|   |-- doc/                    (Documentation)
+|   |   |-- commentary.doc      (Commentary on code)
+|   |   |-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)
+|   |   `-- documentation.txt   (Documentation on the code)
+|   `-- src/                    (Source code files)
+|       |-- create.sql          (SQL, Perl, shell scripts, etc)    
+|       |-- parse.pl
+|       |-- populate.sh
+|       `-- ...etc...
+|-- frontend/                   (Frontend code)
+|   |-- readme.txt              (Name and email of author)         
+|   |-- doc/                    (Documentation)                    
+|   |   |-- commentary.doc      (Commentary on code)               
+|   |   |-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)  
+|   |   `-- documentation.txt   (Documentation on the code)        
+|   `-- src/                    (Source code files)                
+|       |-- cgi/                (CGI scripts)
+|       |   `-- search.pl
+|       `-- html/               (HTML pages)
+|           |-- index.html
+|           `-- project.css
+`-- middlelayer/                (Middle layer code)                    
+    |-- readme.txt              (Name and email of author)         
+    |-- doc/                    (Documentation)                    
+    |   |-- commentary.doc      (Commentary on code)               
+    |   |-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)  
+    |   `-- documentation.txt   (Documentation on the code)        
+    `-- src/                    (Source code files)                
+        `-- extractSequence.pl
+Alternatively, if you supply a single documentation file for the whole project (with authors of different parts of the documentation identified):
+
+topdir/                         (Top directory)
+|-- readme.txt                  (URL for server, names and emails of team)
+|-- doc/                        (Documentation for the project)
+|   `-- documentation.txt       (Documentation file)
+|-- database/                   (Database code)
+|   |-- readme.txt              (Name and email of author)
+|   |-- commentary/             (Commentary)
+|   |   |-- commentary.doc      (Commentary on code)
+|   |   `-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)
+|   `-- src/                    (Source code files)
+|       |-- create.sql          (SQL, Perl, shell scripts, etc)    
+|       |-- parse.pl
+|       |-- populate.sh
+|       `-- ...etc...
+|-- frontend/                   (Frontend code)
+|   |-- readme.txt              (Name and email of author)         
+|   |-- commentary/             (Commentary)                    
+|   |   |-- commentary.doc      (Commentary on code)               
+|   |   `-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)  
+|   `-- src/                    (Source code files)                
+|       |-- cgi/                (CGI scripts)
+|       |   `-- search.pl
+|       `-- html/               (HTML pages)
+|           |-- index.html
+|           `-- project.css
+`-- middlelayer/                (Middle layer code)                    
+    |-- readme.txt              (Name and email of author)         
+    |-- commentary/             (Commentary)                    
+    |   |-- commentary.doc      (Commentary on code)               
+    |   `-- commentary.pdf      (MUST SUPPLY A PDF IF USING WORD)  
+    `-- src/                    (Source code files)                
+        `-- extractSequence.pl
+Marking criteria
+
+In general we will be taking a loose, "holistic" approach to marking so we are able to give credit where it has been earned rather than penalizing people for not doing enough in one area.
+
+However, criteria will include:
+
+How well does the web server meet the required brief?
+How easy is it to use?
+Is the 3-layer design properly implemented?
+Quality of the HTML
+is it compatible with XHTML (or later) standards?
+is all formatting done with CSS?
+does it make appropriate use of semantic markup?
+Quality of code
+is code properly laid out and indented?
+is it readable and understandable using suitable variable names?
+does it use appropriate error and code checking?
+is it properly commented?
+are things like hard-coded pathnames, database details, etc appropriately placed to make installation on a different machine straightforward?
+Quality of documentation
+is all code appropriately documented?
+is the documentation clear and easy to understand?
+is the interface well documented - either with a separate user manual or with appropriate help information on the web pages?
+Commentary/Reflection - are the following items addressed
+How well did the development cycle within the group work?
+What were the challenges?
+What might they have done differently?
+What have you gained from this experience in terms of becoming a better programmer?

@@ -1,0 +1,39 @@
+Project work
+The aim of the project is to expose you to a reasonably large collaborative programming project.
+
+Your group will have been allocated a chromosome to work on, so your first task will be to download the human genomic DNA records which contain coding sequences from Genbank for that chromosome onto your account on Fortuna.
+
+Your tasks are as follows:
+
+Database creation:
+Design a relational database in which you will store appropriate pieces of data from the Genbank file. What data are appropriate will be up to you to decide given the other requirements of the project.
+Write a parser that can extract the relevant data from the Genbank file and convert the data to SQL that can be loaded into the database. Note that your parser will have to deal with identifying intron/exon boundaries and finding the coding sequence of the DNA (see notes below)
+Middle layer code (Logic and data tiers):
+The data tier is designed to create a layer of abstraction on top of the database. It should be a set of Perl routines that will provide requested data. All SQL needed to query the database should appear in this code.
+The logic tier contains the "business rules" that take requests from the interface, extract data from the data tier, perform any needed processing of the data, including any calculations that need to be done.
+Web-based graphical user interface:
+A (set of) web pages that allow the user to query the database via the middle layer code
+Supporting Perl/CGI scripts that access the business logic layer of code when forms are submitted and generate new pages
+Requirements for the queries are listed below
+All code must be commented internally and must be documented in a separate manual which will explain what each piece of code does. In particular, the middle layer code must be carefully documented to explain how each routine can be called from the graphical front end.
+
+Web page requirements
+
+You must be able to display a summary list of all the gene identifiers, protein product names, Genbank accession, chromosomal location (e.g. 8q24.3). From that list you should be able to click to see the details of the particular gene.
+You must be able to search the database to find an entry based on gene identifier, protein product names, Genbank accession, or chromosomal location.
+The detail page for a particular entry should allow you to view the following information:
+The complete DNA sequence with the coding regions highlighted
+The amino acid sequence displayed with the coding DNA sequence
+Codon usage frequencies within the coding region - the overall codon usage information for all sequences in the database should also be available [MORE INFORMATION]
+The ability to identify sticky-end restriction enzyme sites in the genomic DNA - i.e. in both coding and non-coding regions. Restriction enzymes that cut in the 5' upstream and/or 3' downstream regions, but not in-between should be highlighted. At a minimum you should include the ability to search for EcoRI, BamHI and BsuMI - optionally you may include other enzymes. You could also allow a restriction sequence to be entered by the user
+Notes
+
+Many entries will not have all the data listed above - for example the gene ID may be missing (e.g. entry AB000381).
+
+You should only consider entries that include CDS records - i.e. contain a coding sequence.
+
+The GenBank format is described at http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html and at http://www.insdc.org/files/feature_table.html. Pay particular attention to the 'FEATURES' section and, within that, the CDS (coding sequence) records. Note that a particular record may contain more than one coding sequence.
+
+A small percentage of coding sequences require you to join stretches of DNA from another entry to form the complete coding sequence. (e.g. the coding sequence contains bases 28199-28271 and 28881-28988 from this entry and bases 1003-1983 from another entry). For the purpose of this exercise, these should simply be omitted from the database.
+
+Mutations, variations, and alternative splicing should all be ignored. (In the case of alternative splicing, just take the first splice variant.)
