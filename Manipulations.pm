@@ -2,11 +2,25 @@
 	use strict;
 	use warnings;
 	use 5.010;
+    use DBI;
 
 package Mods::Manipulations;
 
-sub nucAndAmino {
-	my $nuc = shift;
+### Login and connect ###
+    my $dbn = "biodb"; #rn002
+    my $dbhost = "hope";
+    my $dbsource = "dbi:mysql:database=$dbn;host=$dbhost";
+    my $username = "biodb_user"; #rn002
+    my $password = "biodb_p"; #otih4i9mm
+    # my $dbh = DBI->connect($dbsource, $username, $password);
+
+# Takes a gene ID(scalar) and returns the amino acid sequence(scalar)
+sub nucToAmino {
+    my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = $geneid
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
 	my $protein = "";
 	my %translation = qw(
     	TCA  S  TCC  S  TCG  S  TCT  S  TTC  F  TTT  F  TTA  L  TTG  L
@@ -21,15 +35,13 @@ sub nucAndAmino {
 
     while ($nuc =~ /(.{3})/g) {
     	exists $translation{$1} or die "Not a codon $1\n";
-    	$protein .= $translation{$1};
+            $protein .= $translation{$1};
     }
 
-    say "Nucleotide sequence";
-    say $nuc;
-    say "Amini acid sequence";
-    say $protein;
+    return $protein;
 }
 
+### Takes an amino acid string(scalar) and retruns a hash containing the counts
 sub countAA {
 	my $seq = shift;
 	my %aacount;
@@ -42,11 +54,14 @@ sub countAA {
     	$aacount{$acid} = $count;
     }
 
-	foreach my $key (sort {$aacount{$b} <=> $aacount{$a}} keys %aacount) {
-	   say "$key = $aacount{$key}"; 
-	}
+    return %aacount;
+
+	# foreach my $key (sort {$aacount{$b} <=> $aacount{$a}} keys %aacount) {
+	#    say "$key = $aacount{$key}"; 
+	# }
 }
 
+### Takes a nucleotide string(scalar) and retruns a hash containing the counts
 sub countNT {
 	my $seq = shift;
 	my %ntcount;
@@ -59,9 +74,11 @@ sub countNT {
     	$ntcount{$nt} = $count;
     }
 
-	foreach my $key (sort {$ntcount{$b} <=> $ntcount{$a}} keys %ntcount) {
-	   say "$key = $ntcount{$key}"; 
-	}
+    return %ntcount;
+
+	# foreach my $key (sort {$ntcount{$b} <=> $ntcount{$a}} keys %ntcount) {
+	#    say "$key = $ntcount{$key}"; 
+	# }
 }
 
 sub countCodon {
@@ -325,7 +342,7 @@ sub overallCodon {
 }
 
 sub getSequence {
-    my $gene = shift
+    my $gene = shift;
     say "SELECT sequence FROM whereever WHERE gene = $gene";
     #highlighting mechanism
 }
