@@ -17,7 +17,7 @@ package Mods::Manipulations;
 # Takes a gene ID(scalar) and returns the amino acid sequence(scalar)
 sub nucToAmino {
     my $geneid = shift;
-    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = $geneid
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
     my $sth = $dbh->prepare($sql);
     $sth->execute();
     my $nuc = $dbh->selectrow_array($sql);
@@ -41,16 +41,21 @@ sub nucToAmino {
     return $protein;
 }
 
-### Takes an amino acid string(scalar) and retruns a hash containing the counts
+### Takes a gene ID(scalar) and retruns a hash containing the counts
 sub countAA {
-	my $seq = shift;
+    my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
+
 	my %aacount;
 	my @aa = qw(
 	A R N D C Q E G H I L K M F P S T W Y V
     );
 
     foreach my $acid (@aa) {
-    	my $count = () = $seq =~ /$acid/g;
+    	my $count = () = $nuc =~ /$acid/g;
     	$aacount{$acid} = $count;
     }
 
@@ -61,16 +66,20 @@ sub countAA {
 	# }
 }
 
-### Takes a nucleotide string(scalar) and retruns a hash containing the counts
+### Takes a gene ID(scalar) and retruns a hash containing the counts
 sub countNT {
-	my $seq = shift;
+	my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
 	my %ntcount;
 	my @aa = qw(
 	A T C G
     );
 
     foreach my $nt (@aa) {
-    	my $count = () = $seq =~ /$nt/g;
+    	my $count = () = $nuc =~ /$nt/g;
     	$ntcount{$nt} = $count;
     }
 
@@ -81,9 +90,13 @@ sub countNT {
 	# }
 }
 
+### Takes a gene ID(scalar) and retruns a hash containing the counts
 sub countCodon {
-    my $seq = shift;
-
+    my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
     my %aminoacids = (
         a =>{
                 'GCA' => 0,
@@ -193,7 +206,7 @@ sub countCodon {
                 },
         );
 
-    while ($seq =~ /(.{3})/g) {
+    while ($nuc =~ /(.{3})/g) {
         foreach my $amino (keys %aminoacids) {
             foreach my $codon (%{$aminoacids{$amino}}) {
                 if ($codon eq $1) {
@@ -202,18 +215,22 @@ sub countCodon {
             }
         }
     }
+    return %aminoacids;
 
-    foreach my $key (sort keys %aminoacids) {
-        say "$key amino acids are:";
-        foreach my $cdn (%{$aminoacids{$key}}) {
-            say $cdn;
-        }
-    }
+    # foreach my $key (sort keys %aminoacids) {
+    #     say "$key amino acids are:";
+    #     foreach my $cdn (%{$aminoacids{$key}}) {
+    #         say $cdn;
+    #     }
+    # }
 }
 
+### Retruns a hash containing the counts for every gene in the database
 sub overallCodon {
-    my $db = "SELECT sequence FROM whereever";
-    my $seq = $db;
+    my $sql = "SELECT pdb_code FROM protein"; #SELECT dna_seq FROM genbank_info
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my seq = "";
     my %aminoacids = (
         a =>{
                 'GCA' => 0,
@@ -323,7 +340,11 @@ sub overallCodon {
                 },
         );
 
-    while ($seq =~ /(.{3})/g) {
+    while(my $row = $sth->fetchrow_array) {
+        $seq .= $row;
+    }
+
+   while ($seq =~ /(.{3})/g) {
         foreach my $amino (keys %aminoacids) {
             foreach my $codon (%{$aminoacids{$amino}}) {
                 if ($codon eq $1) {
@@ -332,23 +353,23 @@ sub overallCodon {
             }
         }
     }
+    return %aminoacids;
 
-    foreach my $key (sort keys %aminoacids) {
-        say "$key amino acids are:";
-        foreach my $cdn (%{$aminoacids{$key}}) {
-            say $cdn;
-        }
-    }
+    # foreach my $key (sort keys %aminoacids) {
+    #     say "$key amino acids are:";
+    #     foreach my $cdn (%{$aminoacids{$key}}) {
+    #         say $cdn;
+    #     }
+    # }
 }
 
-sub getSequence {
-    my $gene = shift;
-    say "SELECT sequence FROM whereever WHERE gene = $gene";
-    #highlighting mechanism
-}
-
+### Takes a gene ID(scalar) and retruns an array containing the restriction enzymes usable
 sub getRestrictionEnzymes {
-    my $seq = shift;
+    my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
     my $before = "";
     my $after = "";
     my %re = (
@@ -368,10 +389,10 @@ sub getRestrictionEnzymes {
     my @enzymes;
 
     # capture strings
-        if ($seq =~ /^(.*)ATG/) {
+        if ($nuc =~ /^(.*)ATG/) {
             $before = $1;
         }
-        if ($seq =~ /(TAG|TAA|TGA)(.*)/) {
+        if ($nuc =~ /(TAG|TAA|TGA)(.*)/) {
             $after = $2;
         }
     
@@ -396,7 +417,23 @@ sub getRestrictionEnzymes {
         }
     }
 
-    say @enzymes;
+    return @enzymes;
+}
+
+sub getCodingRegion {
+    my $gene = shift;
+    say "SELECT sequence FROM whereever WHERE gene = $gene";
+    #highlighting mechanism
+
+        my $geneid = shift;
+    my $sql = "SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'"; #SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
+}
+
+sub getSequence{
+    
 }
 
 1;
