@@ -56,7 +56,7 @@ package Mods::Searches;
 		my $sth = $dbh->prepare($sql);
 		$sth->execute();
 		my @location;
-		while(my $geneloc = $sth->fetchrow_array) {;
+		while(my $geneloc = $sth->fetchrow_array) {
 			push(@location, $geneloc);
 		}
 		return @location;
