@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+    use strict;
+    use warnings;
+    use 5.010;
+    use DBI;
+
+package Mods::testmod;
+
+### Login and connect ###
+    my $dbn = "ms004"; #rn002, biodb, ms004
+    my $dbhost = "hope";
+    my $dbsource = "dbi:mysql:database=$dbn;host=$dbhost";
+    my $username = "ms004"; #rn002, biodb_user, ms004
+    my $password = "1u76tv9v9"; #otih4i9mm, biodb_p, 1u76tv9v9
+    my $dbh = DBI->connect($dbsource, $username, $password);
+
+### Takes a gene ID(scalar) and retruns a hash containing the counts
+sub countAA {
+    my $geneid = shift;
+    my $sql = "SELECT aa_seq FROM amino_acid WHERE gene_id = '$geneid'"; #"SELECT pdb_code FROM protein WHERE pdb_code = '$geneid'";
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+    my $nuc = $dbh->selectrow_array($sql);
+
+	my %aacount;
+	my @aa = qw(
+	A R N D C Q E G H I L K M F P S T W Y V
+    );
+
+    foreach my $acid (@aa) {
+    	my $count = () = $nuc =~ /$acid/g;
+    	$aacount{$acid} = $count;
+    }
+
+    return %aacount;
+
+	# foreach my $key (sort {$aacount{$b} <=> $aacount{$a}} keys %aacount) {
+	#    say "$key = $aacount{$key}"; 
+	# }
+}
+
+# my %count = countAA("SPON2");
+
+# foreach my $key (sort {$count{$b} <=> $count{$a}} keys %count) {
+#     say "$key = $count{$key}"; 
+# }
+
+1;
