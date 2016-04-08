@@ -1,0 +1,5 @@
+Create a folder.
+Copy the test.html file into this folder, and then create a new folder called cgi-bin in this folder.
+Copy cgi.pl into the cgi-bin folder, and then create a new fodlers called Mods.
+Copy testmod.pm into the Mods folder.
+Ensure all scripts are executable.
