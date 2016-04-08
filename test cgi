@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+	use CGI;
+	use strict;
+	use warnings;
+	use Mods::testmod;
+	use 5.010;
+
+my $cgi = new CGI;
+print $cgi->header();
+my $aa = $cgi->param('gene_id');
+my %aacount = Mods::testmod::countAA($aa);
+
+print <<__EOF;
+<html>
+<head>
+   <title>test</title>
+</head>
+<body>
+<h1>Amino acid count for gene id: $aa</h1>
+__EOF
+
+foreach my $key (sort {$aacount{$b} <=> $aacount{$a}} keys %aacount) {
+	say "<p>$key = $aacount{$key}</p>"; 
+}
+
+print <<__EOF;
+</body>
+</html>
+__EOF
