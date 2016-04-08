@@ -1,0 +1,11 @@
+<html>
+<head>
+<title>Amino Acid Count</title>
+</head>
+<body>
+	<form action='http://student.cryst.bbk.ac.uk/cgi-bin/cgiwrap/ms004/cgi.pl' method='get'>
+		<input type='text' name='gene_id'>
+		<input type='submit'>
+	</form>
+</body>
+</html>
