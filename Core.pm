@@ -395,7 +395,7 @@ sub getRestrictionEnzymes {
     foreach my $enzyme (keys %re) {
         foreach my $site (keys %{$re{$enzyme}}) {
             if ($re{$enzyme}{$site} == 2) {
-                push (@enzymes, $enzyme);
+                push (@enzymes, $site);
             }
         }
     }
