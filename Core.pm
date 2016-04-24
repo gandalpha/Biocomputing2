@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use 5.010;
-use Mods::Database; # or Database    , depending on location
+use Database; # or Database    , depending on location
 
 package Mods::Core;
 
@@ -409,15 +409,15 @@ sub getRestrictionEnzymes {
 }
 
 ### Takes an accession numnber (scalar) and returns the gene ID to be used in the subroutines
-sub getGenefromAccession {
+sub getGeneFromAccession {
     my $acc = shift;
 
     my $geneid = Mods::Database::getSQLResult("gene_id", "gene", "accession_number", "$acc");
     return $geneid;
 }
 
-### Takes an accession numnber (scalar) and returns the gene ID to be used in the subroutines
-sub getGenefromProduct {
+### Takes an protein product (scalar) and returns the gene ID to be used in the subroutines
+sub getGeneFromProduct {
     my $product = shift;
 
     my @geneids = Mods::Database::getSQLAllSpecific("gene_id", "gene", "protein_product", "$product");
