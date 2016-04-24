@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use 5.010;
-use Database;
+use Mods::Database;
 
 package Mods::Core;
 
@@ -76,7 +76,7 @@ sub getCodingSequence {
 ### Takes a gene ID(scalar) and returns a hash containing the counts (including stops)
 sub countCodon {
     my $geneid = shift;
-	my $seq = getCodingSequence($geneid);    
+    my $seq = getCodingSequence($geneid);    
     my %aminoacids = (
         a =>{
                 'GCA' => 0,
@@ -209,8 +209,8 @@ sub countCodon {
 
 ### Rturns a hash containing the counts of all sequences in the database (including stops)
 sub countAllCodon {
-	my @allseqs = Mods::Database::getSQLAll("seq", "gene");
-	my $seq = join("", @allseqs);
+    my @allseqs = Mods::Database::getSQLAll("seq", "gene");
+    my $seq = join("", @allseqs);
 
     my %aminoacids = (
         a =>{
@@ -387,14 +387,14 @@ sub getRestrictionEnzymes {
     }
 
     if (@enzymes) {
-    	return @enzymes;
+        return @enzymes;
     }
     else {
-    	return @empty;
+        return @empty;
     }
 }
 
-my @array = getRestrictionEnzymes("SPON2");
-say @array;
+# my @array = getRestrictionEnzymes("SPON2");
+# say @array;
 
 1;
