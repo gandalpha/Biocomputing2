@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use 5.010;
-use Database; # or Mods::Database    , depending on location
+use Database; # or Database    , depending on location
 
 package Mods::Core;
 
@@ -393,7 +393,7 @@ sub getRestrictionEnzymes {
     # Checks the restriction enzyme hash for any values of 2
     # Pushes these enzymes to a new array to be returned
     foreach my $enzyme (keys %re) {
-        foreach my $site (%{$re{$enzyme}}) {
+        foreach my $site (keys %{$re{$enzyme}}) {
             if ($re{$enzyme}{$site} == 2) {
                 push (@enzymes, $enzyme);
             }
