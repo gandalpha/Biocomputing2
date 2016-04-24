@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use 5.010;
-use Mods::Database;
+use Database; # or Mods::Database    , depending on location
 
 package Mods::Core;
 
@@ -344,6 +344,7 @@ sub getRestrictionEnzymes {
 
     my @introns;
     my @enzymes;
+    my $coding;
     my @empty = ("No restriction enzymes found");
     my %re = (
         ecori =>{
@@ -359,10 +360,12 @@ sub getRestrictionEnzymes {
 
 
     # Searches for the first and last non coding regions and extracts the sequence
-    if ($seq =~ /(.*?)$codingregions[0].*$codingregions[-1](.*)/g) {
+    if ($seq =~ /(.*?)($codingregions[0].*$codingregions[-1])(.*)/g) {
         push (@introns, $1);
-        push (@introns, $2);
+        $coding = $2;
+        push (@introns, $3);
     }
+
 
     # Searches each intron and sees if there are matches to the restriction enzymes
     # If there are matches, increase the count by 1
@@ -370,8 +373,19 @@ sub getRestrictionEnzymes {
         foreach my $site (%{$re{$enzyme}}) {
             foreach my $i (0..1) {
                 if ($introns[$i] =~ /$site/) {
-                    $re{$enzyme}{$site}++
+                    $re{$enzyme}{$site}++;
                 }
+            }
+        }
+    }
+
+    # Searches inbetween the first and last non coding regions to see if the restriction
+    # enzyme matches. If there is a match, set the value to 0 to represent an unusable
+    # enzyme
+    foreach my $enzyme (keys %re) {
+        foreach my $site (%{$re{$enzyme}}) {
+            if ($coding =~ /$site/){
+                $re{$enzyme}{$site} = 0;
             }
         }
     }
@@ -394,7 +408,20 @@ sub getRestrictionEnzymes {
     }
 }
 
-# my @array = getRestrictionEnzymes("SPON2");
-# say @array;
+### Takes an accession numnber (scalar) and returns the gene ID to be used in the subroutines
+sub getGenefromAccession {
+    my $acc = shift;
+
+    my $geneid = Mods::Database::getSQLResult("gene_id", "gene", "accession_number", "$acc");
+    return $geneid;
+}
+
+### Takes an accession numnber (scalar) and returns the gene ID to be used in the subroutines
+sub getGenefromProduct {
+    my $product = shift;
+
+    my @geneids = Mods::Database::getSQLAllSpecific("gene_id", "gene", "protein_product", "$product");
+    return @geneids;
+}
 
 1;
