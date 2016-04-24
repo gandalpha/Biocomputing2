@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use 5.010;
-use Database; # or Database    , depending on location
+use Mods::Database; # or Database    , depending on location
 
 package Mods::Core;
 
