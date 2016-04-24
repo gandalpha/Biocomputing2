@@ -29,17 +29,35 @@ sub getSQLResult {
 
 # Takes SELECT and FROM as parameters and returns an array
 sub getSQLAll {
-	my $select = shift;
+    my $select = shift;
     my $from = shift;
     my $sql = "SELECT $select FROM $from";
     my $sth = $dbh->prepare($sql);
     $sth->execute();
 
     my @result;
-	while (my $row = $sth->fetchrow_array) {
-		push (@result, $row);
-	}
-	
+    while (my $row = $sth->fetchrow_array) {
+        push (@result, $row);
+    }
+    
+    return @result;
+}
+
+# Takes SELECT, FROM, WHERE and a search parameter, in scalar, and returns an array
+sub getSQLAllSpecific {
+    my $select = shift;
+    my $from = shift;
+    my $where = shift;
+    my $search = shift;
+    my $sql = "SELECT $select FROM $from WHERE $where = '$search'";
+    my $sth = $dbh->prepare($sql);
+    $sth->execute();
+
+    my @result;
+    while (my $row = $sth->fetchrow_array) {
+        push (@result, $row);
+    }
+    
     return @result;
 }
 
